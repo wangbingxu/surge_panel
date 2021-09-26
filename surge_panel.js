@@ -31,8 +31,8 @@ Sub_info = script-name=Sub_info,update-interval=600
   let resetDay = parseInt(params["reset_day"]);
   let resetLeft = getRmainingDays(resetDay);
   let usage = await getDataUsage(params.url);
-  let used = usage.download + usage.upload;
-  let total = usage.total;
+  let used = usage.bw_counter_b;
+  let total = usage.monthly_bw_limit_b;
   let expire = usage.expire || params.expire;
   let infoList = [`使用：${bytesToSize(used)} | ${bytesToSize(total)}`];
 
