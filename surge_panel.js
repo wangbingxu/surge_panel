@@ -67,36 +67,13 @@ function getUrlParams(url) {
   );
 }
 
-function getUserInfo(url) {
-      console.log(url)
-  let request = { headers: { "User-Agent": "Quantumult%20X" }, url };
-  return new Promise((resolve) =>
-    $httpClient.head(request, (err, resp) => {
-      if (!resp) $done();
-      resolve(
-        resp.headers[
-          Object.keys(resp.headers).find(
-            (key) => key.toLowerCase() === "subscription-userinfo"
-          )
-        ]
-      );
-    })
-  );
-}
-
 async function getDataUsage(url) {
-  let info = await getUserInfo(url);
-  console.log(info)
+  let info = await getData(url);
   if (!info) {
     $notification.post("SubInfo", "", "链接响应头不带有流量信息");
     $done();
   }
-  return Object.fromEntries(
-    info
-      .match(/\w+=\d+/g)
-      .map((item) => item.split("="))
-      .map(([k, v]) => [k, parseInt(v)])
-  );
+  return JSON.parse(info);
 }
 
 function getRmainingDays(resetDay) {
@@ -128,3 +105,27 @@ function formatTime(time) {
   return year + "年" + month + "月" + day + "日";
 }
 
+function getData(url) {
+  return new Promise((resolve, reject) => {
+    let option = {
+      url: url,
+headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
+      },
+    }
+    $httpClient.get(option, function (error, response, data) {
+console.log(data)
+      if (error != null) {
+        reject('Error')
+        return
+      }
+
+      if (response.status !== 200) {
+        resolve('Not Available')
+        return
+      }
+      resolve(data)
+    })
+  })
+}
