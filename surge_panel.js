@@ -71,6 +71,8 @@ function getUserInfo(url) {
   let request = { headers: { "User-Agent": "Quantumult%20X" }, url };
   return new Promise((resolve) =>
     $httpClient.head(request, (err, resp) => {
+    console.log(err)
+    console.log(resp)
       if (!resp) $done();
       resolve(
         resp.headers[
