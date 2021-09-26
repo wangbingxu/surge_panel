@@ -85,6 +85,7 @@ function getUserInfo(url) {
 
 async function getDataUsage(url) {
   let info = await getUserInfo(url);
+  console.log(info)
   if (!info) {
     $notification.post("SubInfo", "", "链接响应头不带有流量信息");
     $done();
